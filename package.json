@@ -1,0 +1,19 @@
+{
+  "name": "webcoin-params",
+  "version": "0.0.0",
+  "description": "Abstract blockchain/network params for webcoin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webcoin",
+    "bitcoin",
+    "params",
+    "parameters",
+    "network",
+    "constants"
+  ],
+  "author": "Matt Bell <mappum@gmail.com>",
+  "license": "MIT"
+}
