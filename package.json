@@ -15,5 +15,13 @@
     "constants"
   ],
   "author": "Matt Bell <mappum@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bitcoin-util": "^2.0.0",
+    "bn.js": "^4.11.0",
+    "browserify-buffertools": "^1.0.2"
+  },
+  "optionalDependencies": {
+    "buffertools": "^2.1.3"
+  }
 }
