@@ -25,7 +25,11 @@ function createParams (params, assert) {
     var params = Object.assign({}, extend, child)
     params.blockchain = Object.assign({}, extend.blockchain, child.blockchain)
     delete params.blockchain.checkpoints
-    params.net = Object.assign({}, extend.net, child.net)
+    params.net = Object.assign({}, extend.net, {
+      dnsSeeds: null,
+      staticPeers: null,
+      webSeeds: null
+    }, child.net)
     return createParams(params, assert)
   }
   return Object.assign(extend, params)
