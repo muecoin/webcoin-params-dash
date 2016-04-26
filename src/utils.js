@@ -1,3 +1,9 @@
+var proto = require('bitcoin-protocol')
+var struct = proto.struct
+var defaultNetMessages = proto.messages.defaultMessages
+var inherits = require('inherits')
+var DefaultBlock = require('bitcoinjs-lib').Block
+
 function createParams (params, assert) {
   assert = assert != null ? assert : true
   if (assert) {
@@ -21,15 +27,53 @@ function createParams (params, assert) {
     }
   }
 
+  if (!params.Block) {
+    var Block = function () { DefaultBlock.call(this) }
+    inherits(Block, DefaultBlock)
+    params.Block = Block
+
+    if (params.structs && (params.structs.header || params.structs.transaction)) {
+      var headerStruct = params.structs.header || proto.types.header
+      var txStruct = params.structs.transaction || proto.types.transaction
+      var txArrayStruct = struct.VarArray(proto.varint, txStruct)
+
+      Block.prototype.toBuffer = function (headersOnly) {
+        var header = headerStruct.encode(this)
+        if (headersOnly || !this.transactions) return header
+        var txs = txArrayStruct.encode(this.transactions)
+        return Buffer.concat([ header, txs ])
+      }
+
+      Block.fromBuffer = function (buffer) {
+        var block = new Block()
+        var header = headerStruct.decode(buffer)
+        Object.assign(block, header)
+        if (headerStruct.decode.bytes === buffer.length) return block
+        block.transactions = txArrayStruct.decode(buffer, headerStruct.decode.bytes)
+        return block
+      }
+    }
+  }
+  params.blockchain.Block = params.net.Block = params.Block
+
   function extend (child, assert) {
     var params = Object.assign({}, extend, child)
+
     params.blockchain = Object.assign({}, extend.blockchain, child.blockchain)
     delete params.blockchain.checkpoints
+
     params.net = Object.assign({}, extend.net, {
       dnsSeeds: null,
       staticPeers: null,
       webSeeds: null
     }, child.net)
+    var extendMessages = (extend.net && extend.net.messages) || defaultNetMessages
+    params.net.messages = extendMessages(child.net.messages)
+
+    params.structs = Object.assign({}, extend.structs, child.structs)
+
+    params.Block = null
+
     return createParams(params, assert)
   }
   return Object.assign(extend, params)
