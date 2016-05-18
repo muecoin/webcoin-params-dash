@@ -1,6 +1,6 @@
 {
   "name": "webcoin-params",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Abstract cryptocurrency params",
   "main": "index.js",
   "scripts": {
