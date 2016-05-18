@@ -2,12 +2,7 @@
 
 var u = require('bitcoin-util')
 var BN = require('bn.js')
-var buffertools
-try {
-  buffertools = require('buffertools')
-} catch (err) {
-  buffertools = require('browserify-buffertools')
-}
+var reverse = require('buffer-reverse')
 
 // difficulty retarget settings
 var interval = 2016
@@ -59,7 +54,7 @@ function calculateTargetFromInterval (maxTarget, startBlock, endBlock) {
 
 // gets the hash of the block header used for mining/proof validation
 function miningHash (header, cb) {
-  return cb(null, buffertools.reverse(header.getHash()))
+  return cb(null, reverse(header.getHash()))
 }
 
 // settings passed to Blockchain objects
