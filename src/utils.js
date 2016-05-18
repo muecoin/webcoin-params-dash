@@ -1,8 +1,9 @@
 var proto = require('bitcoin-protocol')
 var struct = proto.struct
 var defaultNetMessages = proto.messages.defaultMessages
-var inherits = require('inherits')
 var DefaultBlock = require('bitcoinjs-lib').Block
+var inherits = require('inherits')
+var assign = require('object-assign')
 
 function createParams (params, assert) {
   assert = assert != null ? assert : true
@@ -31,7 +32,7 @@ function createParams (params, assert) {
     var Block = function () { DefaultBlock.call(this) }
     inherits(Block, DefaultBlock)
     params.Block = Block
-    Object.assign(Block, DefaultBlock)
+    assign(Block, DefaultBlock)
 
     if (params.structs && (params.structs.header || params.structs.transaction)) {
       var headerStruct = params.structs.header || proto.types.header
@@ -48,7 +49,7 @@ function createParams (params, assert) {
       Block.fromBuffer = function (buffer) {
         var block = new Block()
         var header = headerStruct.decode(buffer)
-        Object.assign(block, header)
+        assign(block, header)
         if (headerStruct.decode.bytes === buffer.length) return block
         block.transactions = txArrayStruct.decode(buffer, headerStruct.decode.bytes)
         return block
@@ -58,12 +59,12 @@ function createParams (params, assert) {
   params.blockchain.Block = params.net.Block = params.Block
 
   function extend (child, assert) {
-    var params = Object.assign({}, extend, child)
+    var params = assign({}, extend, child)
 
-    params.blockchain = Object.assign({}, extend.blockchain, child.blockchain)
+    params.blockchain = assign({}, extend.blockchain, child.blockchain)
     delete params.blockchain.checkpoints
 
-    params.net = Object.assign({}, extend.net, {
+    params.net = assign({}, extend.net, {
       dnsSeeds: null,
       staticPeers: null,
       webSeeds: null
@@ -71,13 +72,13 @@ function createParams (params, assert) {
     var extendMessages = (extend.net && extend.net.messages) || defaultNetMessages
     params.net.messages = extendMessages(child.net.messages)
 
-    params.structs = Object.assign({}, extend.structs, child.structs)
+    params.structs = assign({}, extend.structs, child.structs)
 
     params.Block = null
 
     return createParams(params, assert)
   }
-  return Object.assign(extend, params)
+  return assign(extend, params)
 }
 
 module.exports = { createParams }
