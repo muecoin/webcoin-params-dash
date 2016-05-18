@@ -31,6 +31,7 @@ function createParams (params, assert) {
     var Block = function () { DefaultBlock.call(this) }
     inherits(Block, DefaultBlock)
     params.Block = Block
+    Object.assign(Block, DefaultBlock)
 
     if (params.structs && (params.structs.header || params.structs.transaction)) {
       var headerStruct = params.structs.header || proto.types.header
