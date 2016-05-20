@@ -3,6 +3,7 @@
 var u = require('bitcoin-util')
 var BN = require('bn.js')
 var reverse = require('buffer-reverse')
+var repeat = require('repeat-string')
 
 // difficulty retarget settings
 var interval = 2016
@@ -46,7 +47,7 @@ function calculateTargetFromInterval (maxTarget, startBlock, endBlock) {
   }
 
   var hex = target.toString('hex')
-  hex = '0'.repeat(64 - hex.length) + hex
+  hex = repeat('0', 64 - hex.length) + hex
   target = new Buffer(hex, 'hex')
 
   return target
