@@ -55,7 +55,7 @@ function calculateTargetFromInterval (maxTarget, startBlock, endBlock) {
 
 // gets the hash of the block header used for mining/proof validation
 function miningHash (header, cb) {
-  return cb(null, reverse(header.getHash()))
+  return cb(null, reverse(header.getHash())) // TODO - adjust for bitcore-lib-dash
 }
 
 // settings passed to Blockchain objects

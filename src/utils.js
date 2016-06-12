@@ -1,7 +1,8 @@
 var proto = require('bitcoin-protocol')
 var struct = proto.struct
 var defaultNetMessages = proto.messages.defaultMessages
-var DefaultBlock = require('bitcoinjs-lib').Block
+// var DefaultBlock = require('bitcore-lib-dash').BlockHeader
+var DefaultBlock = require('bitcore-lib').BlockHeader
 var inherits = require('inherits')
 var assign = require('object-assign')
 
@@ -29,10 +30,25 @@ function createParams (params, assert) {
   }
 
   if (!params.Block) {
-    var Block = function () { DefaultBlock.call(this) }
-    inherits(Block, DefaultBlock)
-    params.Block = Block
-    assign(Block, DefaultBlock)
+
+    /*
+     var Block = function () { DefaultBlock.call(this) }
+     inherits(Block, DefaultBlock)
+     params.Block = Block
+     assign(Block, DefaultBlock)
+     */
+
+    var Block = DefaultBlock;
+    params.Block = Block;
+
+    Block.prototype.getId = function() {
+      var id = new Buffer(this._getHash(), 'hex').reverse()
+      return id.toString('hex')
+    }
+
+    Block.prototype.getHash = function() {
+      return(this._getHash())
+    }
 
     if (params.structs && (params.structs.header || params.structs.transaction)) {
       var headerStruct = params.structs.header || proto.types.header
@@ -54,6 +70,7 @@ function createParams (params, assert) {
         block.transactions = txArrayStruct.decode(buffer, headerStruct.decode.bytes)
         return block
       }
+
     }
   }
   params.blockchain.Block = params.net.Block = params.Block
