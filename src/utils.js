@@ -1,8 +1,8 @@
 var proto = require('bitcoin-protocol')
 var struct = proto.struct
 var defaultNetMessages = proto.messages.defaultMessages
-// var DefaultBlock = require('bitcore-lib-dash').BlockHeader
-var DefaultBlock = require('bitcore-lib').BlockHeader
+var DefaultBlock = require('bitcore-lib-dash').BlockHeader
+// var DefaultBlock = require('bitcore-lib').BlockHeader
 var inherits = require('inherits')
 var assign = require('object-assign')
 
