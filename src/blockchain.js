@@ -1,6 +1,6 @@
 // blockchain definition
 
-var u = require('dash-util')
+var u = require('mue-util')
 var BN = require('bn.js')
 var reverse = require('buffer-reverse')
 var repeat = require('repeat-string')
