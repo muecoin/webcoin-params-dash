@@ -1,4 +1,4 @@
-var proto = require('dash-protocol')
+var proto = require('mue-protocol')
 var struct = proto.struct
 var defaultNetMessages = proto.messages.defaultMessages
 var DefaultBlock = require('bitcore-lib-dash').BlockHeader
